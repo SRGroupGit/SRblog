@@ -1,101 +1,140 @@
+"use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [ListedPosts, setListedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const link = "https://admin.sreddygroup.com";
+
+  useEffect(() => {
+    axios
+      .get(`${link}/api/collections/blogs/records`)
+      .then((response) => {
+        setListedPosts(response.data.items);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
+
+  interface PostData {
+    id: string;
+    title: string;
+    author: string;
+    short_discription: string;
+    publish_date: string;
+    tags: [string];
+    hero_image: string;
+    slug: string;
+  }
+
+  return (
+    <>
+      <section className=" flex flex-col gap-4 items-center justify-center pt-12">
+        <span className=" text-xl font-medium">SR Group Blog</span>
+        <h1 className=" text-5xl md:text-6xl  font-bold text-center">
+          Writings from our team
+        </h1>
+        <p className=" italic opacity-80 text-center">
+          Latest industry news, interviews and resources
+        </p>
+      </section>
+      <section>
+        {loading ? (
+          <div className=" grid animate-pulse duration-900 w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            <div className=" w-full flex items-center justify-center aspect-[4/5] rounded-lg bg-gray-100 dark:bg-neutral-900 dark:border-neutral-800 border-gray-200 border ">
+              <Icon
+                className=" animate-spin"
+                icon="icon-park-outline:loading-four"
+                width="48"
+                height="48"
+              />
+            </div>
+            <div className=" w-full flex items-center justify-center  aspect-[4/5] rounded-lg bg-gray-100  dark:bg-neutral-900 dark:border-neutral-800 border-gray-200 border ">
+              <Icon
+                className=" animate-spin"
+                icon="icon-park-outline:loading-four"
+                width="48"
+                height="48"
+              />
+            </div>
+            <div className=" w-full flex items-center justify-center  aspect-[4/5] rounded-lg bg-gray-100  dark:bg-neutral-900 dark:border-neutral-800 border-gray-200 border ">
+              <Icon
+                className=" animate-spin"
+                icon="icon-park-outline:loading-four"
+                width="48"
+                height="48"
+              />
+            </div>
+          </div>
+        ) : error ? (
+          <div className=" text-center">Error: {error}</div>
+        ) : (
+          <div className=" grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {ListedPosts.slice(1).map((post: PostData) => (
+              <div
+                key={post.id}
+                className=" aspect-[4/5] flex flex-col overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-900 dark:border-neutral-800 border-gray-200 justify-between border"
+              >
+                <div>
+                  <Image
+                    width={1280}
+                    height={720}
+                    className=" object-cover object-center aspect-video"
+                    src={`${link}/api/files/blogs/${post.id}/${post.hero_image}`}
+                    alt={post.title}
+                  />
+                  <div className=" p-3">
+                    <h2 className=" text-2xl text-[#00537F] dark:text-[#E49C2F] font-semibold ">
+                      {post.title}
+                    </h2>
+
+                    <div className=" flex gap-1 text-black/70 dark:text-white/70 text-xs">
+                      <span className=" ">By {post.author}</span>on
+                      {
+                        <span className=" text-[#00537F] dark:text-[#E49C2F] ">
+                          {new Date(post.publish_date).toLocaleDateString()}
+                        </span>
+                      }
+                    </div>
+
+                    <p className=" mt-2 text-sm font-light text-gray-700 dark:text-gray-200">
+                      {post.short_discription}
+                    </p>
+                  </div>
+                </div>
+
+                <div className=" p-3">
+                  <div className=" flex w-full gap-2 flex-wrap">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className=" text-xs opacity-80 hover:opacity-100 cursor-pointer bg-[#00537F40] dark:bg-[#E49C2F40] text-[#00537F] dark:text-[#E49C2F] rounded-md px-3 py-0.5"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className=" flex w-full items-center rounded-md  bg-white border-neutral-200 border dark:border-neutral-800 dark:bg-black justify-between p-2 mt-4 text-[#00537F] hover:opacity-70 transition-all duration-700 dark:text-[#E49C2F]"
+                  >
+                    <span className=" w-full text-center"> Read more</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }
