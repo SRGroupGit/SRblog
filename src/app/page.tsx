@@ -79,7 +79,7 @@ export default function Home() {
           <div className=" text-center">Error: {error}</div>
         ) : (
           <div className=" grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-            {ListedPosts.slice(1).map((post: PostData) => (
+            {ListedPosts.slice(0).map((post: PostData) => (
               <div
                 key={post.id}
                 className=" aspect-[4/5] flex flex-col overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-900 dark:border-neutral-800 border-gray-200 justify-between border"

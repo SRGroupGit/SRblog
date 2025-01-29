@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
 import { useState, useEffect } from "react";
 import GlobalSearch from "./GlobalSearch";
+import Link from "next/link";
 
 export function Navbar() {
   const { setTheme } = useTheme();
@@ -31,11 +32,13 @@ export function Navbar() {
     <>
       <GlobalSearch searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
       <nav className=" w-full h-20 flex z-[99]  dark:bg-zinc-900/0 fixed top-0 left-0 bg-zinc-200/0 backdrop-blur-lg justify-between items-center px-4">
-        <div className="  h-full aspect-square py-2 ">
-          <Logo />
-        </div>
+        <Link className="  h-full aspect-square " href="/">
+          <div className="  h-full aspect-square py-2 ">
+            <Logo />
+          </div>
+        </Link>
         <div className=" flex items-center gap-2">
-          <Button
+          {/* <Button
             onClick={() => setSearchOpen(!searchOpen)}
             className=" outline-none aspect-square"
             variant="default"
@@ -44,7 +47,7 @@ export function Navbar() {
             <MagnifyingGlassIcon className="h-[1.2rem] w-[1.2rem]  " />
 
             <span className="sr-only">Toggle Search</span>
-          </Button>
+          </Button> */}
           <Button
             onClick={() => setSansFont(!sansFont)}
             className=" outline-none aspect-square"
